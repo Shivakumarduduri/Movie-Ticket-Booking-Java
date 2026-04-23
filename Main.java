@@ -7,26 +7,23 @@ public class MovieBooking {
         Scanner sc = new Scanner(System.in);
 
         int pricePerSeat = 200;
-        int totalSeats = 200;
+        int totalSeats = 20;
 
         String[] movies = {"Avengers", "Leo", "Pushpa"};
 
-        // Each movie has 200 seats
         boolean[][] seats = new boolean[3][totalSeats];
 
-        System.out.print("Enter number of users: ");
-        int n = sc.nextInt();
-        sc.nextLine();
+        int user = 1;
 
-        for (int u = 0; u < n; u++) {
+        while (true) {
 
-            System.out.println("\n--- User " + (u + 1) + " ---");
+            System.out.println("\n--- User " + user + " ---");
 
             System.out.print("Enter name: ");
             String name = sc.nextLine();
 
             // Show movies
-            System.out.println("\nRunning Movies:");
+            System.out.println("Movies:");
             for (int i = 0; i < movies.length; i++) {
                 System.out.println((i + 1) + ". " + movies[i]);
             }
@@ -37,13 +34,12 @@ public class MovieBooking {
 
             if (mChoice < 1 || mChoice > 3) {
                 System.out.println("Invalid movie");
-                u--; // retry same user
                 continue;
             }
 
             int movieIndex = mChoice - 1;
 
-            // Show available seats for selected movie
+            // Show available seats
             System.out.print("Available seats: ");
             for (int i = 0; i < totalSeats; i++) {
                 if (!seats[movieIndex][i]) {
@@ -52,14 +48,14 @@ public class MovieBooking {
             }
             System.out.println();
 
-            // Seat limit (max 4)
+            // seat limit (1 to 4)
             int count;
             while (true) {
                 System.out.print("Enter number of seats (max 4): ");
                 count = sc.nextInt();
 
                 if (count >= 1 && count <= 4) break;
-                else System.out.println("❌ Only 1 to 4 seats allowed");
+                else System.out.println("Only 1 to 4 seats allowed");
             }
 
             int[] bookedSeats = new int[count];
@@ -68,16 +64,8 @@ public class MovieBooking {
                 System.out.print("Enter seat number " + (i + 1) + ": ");
                 int seat = sc.nextInt();
 
-                boolean duplicate = false;
-                for (int j = 0; j < i; j++) {
-                    if (bookedSeats[j] == seat) {
-                        duplicate = true;
-                        break;
-                    }
-                }
-
-                if (seat < 1 || seat > totalSeats || seats[movieIndex][seat - 1] || duplicate) {
-                    System.out.println("❌ Seat not available");
+                if (seat < 1 || seat > totalSeats || seats[movieIndex][seat - 1]) {
+                    System.out.println("Seat not available");
                     i--;
                 } else {
                     bookedSeats[i] = seat;
@@ -86,7 +74,6 @@ public class MovieBooking {
 
             int totalAmount = count * pricePerSeat;
 
-            // Payment
             System.out.println("Total Amount: Rs." + totalAmount);
             System.out.print("Enter amount: ");
             int paid = sc.nextInt();
@@ -98,7 +85,7 @@ public class MovieBooking {
                     seats[movieIndex][s - 1] = true;
                 }
 
-                System.out.println("\n----- TICKET -----");
+                System.out.println("\nTicket:");
                 System.out.println("Name: " + name);
                 System.out.println("Movie: " + movies[movieIndex]);
 
@@ -107,13 +94,20 @@ public class MovieBooking {
                     System.out.print(s + " ");
                 }
 
-                System.out.println("\nTotal: Rs." + totalAmount);
-                System.out.println("Booking Confirmed ✅");
-                System.out.println("------------------");
-
+                System.out.println("\nBooking Confirmed");
             } else {
-                System.out.println("❌ Payment failed");
+                System.out.println("Payment failed");
             }
+
+            // 🔥 continue option
+            System.out.print("\nDo you want to continue booking? (yes/no): ");
+            String cont = sc.nextLine();
+
+            if (!cont.equalsIgnoreCase("yes")) {
+                break;
+            }
+
+            user++;
         }
 
         sc.close();
